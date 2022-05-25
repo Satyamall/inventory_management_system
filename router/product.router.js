@@ -4,7 +4,22 @@ const Product = require("../schema/product.model");
 
 const router = express.Router();
 
-router.post("/",async (req,res)=>{
+// Post Multiple products
+router.post("/multiple",async (req,res)=>{
+    try{
+        const products = await Product.insertMany(req.body);
+
+        if(!products) return res.status(400).json({message: "Product is not pushed into Database"})
+
+        res.status(201).json({payload: products});
+    }
+    catch(err){
+        return res.status(500).json({error: err})
+    }
+})
+
+// Post Single product
+router.post("/single",async (req,res)=>{
     try{
         const product = await Product.create(req.body);
 
